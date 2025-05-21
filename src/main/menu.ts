@@ -54,17 +54,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'ScreenFlow',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About ScreenFlow',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide ScreenFlow',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -100,6 +100,34 @@ export default class MenuBuilder {
         },
       ],
     };
+
+    const subMenuRecord: MenuItemConstructorOptions = {
+      label: 'Recording',
+      submenu: [
+        {
+          label: 'Start New Recording',
+          click: () => {
+            this.mainWindow.webContents.send('menu-start-recording');
+          },
+        },
+        {
+          label: 'Stop Recording',
+          click: () => {
+            this.mainWindow.webContents.send('menu-stop-recording');
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Open Recordings Folder',
+          click: () => {
+            const { shell } = require('electron');
+            const path = require('path');
+            shell.openPath(path.join(app.getPath('videos'), 'ScreenFlow'));
+          },
+        },
+      ],
+    };
+
     const subMenuViewDev: MenuItemConstructorOptions = {
       label: 'View',
       submenu: [
@@ -189,7 +217,7 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [subMenuAbout, subMenuEdit, subMenuRecord, subMenuView, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {
@@ -206,6 +234,32 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+W',
             click: () => {
               this.mainWindow.close();
+            },
+          },
+        ],
+      },
+      {
+        label: '&Recording',
+        submenu: [
+          {
+            label: 'Start &New Recording',
+            click: () => {
+              this.mainWindow.webContents.send('menu-start-recording');
+            },
+          },
+          {
+            label: '&Stop Recording',
+            click: () => {
+              this.mainWindow.webContents.send('menu-stop-recording');
+            },
+          },
+          { type: 'separator' },
+          {
+            label: 'Open Recordings &Folder',
+            click: () => {
+              const { shell } = require('electron');
+              const path = require('path');
+              shell.openPath(path.join(app.getPath('videos'), 'ScreenFlow'));
             },
           },
         ],

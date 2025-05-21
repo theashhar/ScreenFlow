@@ -9,11 +9,12 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, desktopCapturer } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import fs from 'fs';
 
 class AppUpdater {
   constructor() {
@@ -29,6 +30,40 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+// Handle screen recording requests
+ipcMain.handle('get-sources', async () => {
+  return desktopCapturer.getSources({ types: ['window', 'screen'] });
+});
+
+// Directory for saving recordings
+const getVideoDir = () => {
+  return path.join(app.getPath('videos'), 'ScreenFlow');
+};
+
+// Ensure video directory exists
+const ensureVideoDir = () => {
+  const videoDir = getVideoDir();
+  if (!fs.existsSync(videoDir)) {
+    fs.mkdirSync(videoDir, { recursive: true });
+  }
+  return videoDir;
+};
+
+// Handle recording data
+ipcMain.on('recording-data', (event, buffer) => {
+  const videoDir = ensureVideoDir();
+  const fileName = `recording-${new Date().toISOString().replace(/:/g, '-')}.webm`;
+  const filePath = path.join(videoDir, fileName);
+
+  fs.writeFile(filePath, Buffer.from(buffer), (err) => {
+    if (err) {
+      console.error('Failed to save recording:', err);
+    } else {
+      event.reply('recording-complete', filePath);
+    }
+  });
 });
 
 if (process.env.NODE_ENV === 'production') {
