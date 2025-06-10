@@ -6,12 +6,13 @@ body {
   position: relative;
   color: white;
   height: 100vh;
-  background: linear-gradient(
+  /* background: linear-gradient(
     200.96deg,
     #fedc2a -29.09%,
     #dd5789 51.77%,
     #7a2c9e 129.35%
-  );
+  ); */
+  background-color: black;
   font-family: sans-serif;
   overflow-y: auto;
   display: flex;
@@ -131,7 +132,10 @@ button:disabled {
 }
 
 .preview {
-  margin: 20px 0;
+  margin: 20px 10;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
 }
 
 .preview video {
