@@ -26,6 +26,7 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
+//IPC inter process communication helps communication between main(node/server) and renderer(react/client) processes
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -45,8 +46,8 @@ const getVideoDir = () => {
 // Ensure video directory exists
 const ensureVideoDir = () => {
   const videoDir = getVideoDir();
-  if (!fs.existsSync(videoDir)) {
-    fs.mkdirSync(videoDir, { recursive: true });
+  if (!fs.existsSync(videoDir)) { // checks if a file or directory already exists at the specified path
+    fs.mkdirSync(videoDir, { recursive: true }); // recursive: true ensures that all parent folders are created too
   }
   return videoDir;
 };
@@ -113,6 +114,9 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+      webSecurity: false, // Required for screen capture
     },
   });
 
@@ -132,6 +136,18 @@ const createWindow = async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  // Request screen recording permissions on macOS
+  if (process.platform === 'darwin') {
+    const { systemPreferences } = require('electron');
+
+    // Check if we have screen recording permission
+    if (!systemPreferences.getMediaAccessStatus) {
+      console.log('Screen recording permission API not available');
+    } else {
+      console.log('Screen recording permission check available');
+    }
+  }
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
