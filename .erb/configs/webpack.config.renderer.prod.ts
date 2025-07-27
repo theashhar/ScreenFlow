@@ -36,6 +36,18 @@ const configuration: webpack.Configuration = {
     },
   },
 
+  // Add resolve configuration for path aliases
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+    alias: {
+      '@': path.resolve(__dirname, '../../src'),
+      '@/components': path.resolve(__dirname, '../../src/renderer/components'),
+      '@/lib': path.resolve(__dirname, '../../src/renderer/lib'),
+      '@/utils': path.resolve(__dirname, '../../src/renderer/utils'),
+      '@/hooks': path.resolve(__dirname, '../../src/renderer/hooks'),
+    },
+  },
+
   module: {
     rules: [
       {
@@ -47,7 +59,18 @@ const configuration: webpack.Configuration = {
             options: {
               modules: true,
               sourceMap: true,
-              importLoaders: 1,
+              importLoaders: 2, // Updated to 2 for postcss-loader
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
+              },
             },
           },
           'sass-loader',
@@ -56,7 +79,27 @@ const configuration: webpack.Configuration = {
       },
       {
         test: /\.s?(a|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2, // Updated to 2 for postcss-loader
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
+              },
+            },
+          },
+          'sass-loader',
+        ],
         exclude: /\.module\.s?(c|a)ss$/,
       },
       // Fonts
