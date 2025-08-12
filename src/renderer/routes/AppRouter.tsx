@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from '../auth/ProtectedRoute';
 import UnauthLayout from '../layouts/UnauthLayout';
 import AppLayout from '../layouts/AppLayout';
-import { LoginPage, OnboardingRouter } from '../states/unauth';
+import { LoginPage, SignupPage, OnboardingRouter } from '../states/unauth';
 import { Dashboard, ScreenRecorder } from '../states/auth';
 
 const AppRouter: React.FC = () => (
@@ -11,6 +11,7 @@ const AppRouter: React.FC = () => (
     {/* Public Routes */}
     <Route element={<UnauthLayout />}>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route path="/onboarding/*" element={<OnboardingRouter />} />
     </Route>
 
@@ -23,8 +24,8 @@ const AppRouter: React.FC = () => (
     </Route>
 
     {/* Default redirect */}
-    <Route path="/" element={<Navigate to="/app" replace />} />
-    <Route path="*" element={<Navigate to="/app" replace />} />
+    <Route path="/" element={<Navigate to="/login" replace />} />
+    <Route path="*" element={<Navigate to="/login" replace />} />
   </Routes>
 );
 

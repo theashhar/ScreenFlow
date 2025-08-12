@@ -20,10 +20,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   useEffect(() => {
     // TODO: replace with real bootstrap (read token, fetch user, check onboarding)
     const bootstrap = async () => {
-      // For now, skip auth and go directly to authenticated state
-      // since we're moving existing functionality there
-      setAuthState('authenticated');
-      setUser({ id: '1', email: 'user@example.com' });
+      // For now, start with unauthenticated state to show the auth flow
+      setAuthState('unauthenticated');
     };
     bootstrap();
   }, []);
