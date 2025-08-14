@@ -14,8 +14,8 @@ export const RecordingStatus: React.FC<RecordingStatusProps> = ({
 
   return (
     <div className="recording-saved">
-      <h3>Recording saved!</h3>
-      <p>File saved to: {recordingState.savedFilePath}</p>
+      <h3 className="text-foreground font-semibold mb-2">Recording saved!</h3>
+      <p className="text-muted-foreground">File saved to: {recordingState.savedFilePath}</p>
     </div>
   );
 };

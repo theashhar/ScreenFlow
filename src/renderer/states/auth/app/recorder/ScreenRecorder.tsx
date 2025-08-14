@@ -21,7 +21,7 @@ export default function ScreenRecorder() {
 
   return (
     <div className="screen-recorder">
-      <h2 className="text-2xl font-bold mb-6">Screen Recorder</h2>
+      <h2 className="text-2xl font-bold mb-6 text-foreground">Screen Recorder</h2>
 
       <div className="space-y-6">
         <SourceSelector

@@ -1,6 +1,7 @@
 import React from 'react';
 import { RecordingState } from '../types';
 import { Button } from "./ui/button"
+
 interface RecordingControlsProps {
   selectedSource: string;
   recordingState: RecordingState;
@@ -18,18 +19,26 @@ export const RecordingControls: React.FC<RecordingControlsProps> = ({
 }) => {
   return (
     <div className="record-controls">
-      {!recordingState.isRecording ? (<>
-        <Button variant="outline" disabled={!selectedSource || recordingState.recordingComplete} onClick={onStartRecording}>Start Recording</Button>
-        </>
+      {!recordingState.isRecording ? (
+        <Button
+          variant="outline"
+          disabled={!selectedSource || recordingState.recordingComplete}
+          onClick={onStartRecording}
+        >
+          Start Recording
+        </Button>
       ) : (
         <>
           <div className="recording-indicator">
             <div className="recording-dot" />
-            <span>Recording: {formatTime(recordingState.recordingTime)}</span>
+            <span className="text-foreground">Recording: {formatTime(recordingState.recordingTime)}</span>
           </div>
-          <button className="stop-button" onClick={onStopRecording}>
+          <Button
+            variant="destructive"
+            onClick={onStopRecording}
+          >
             Stop Recording
-          </button>
+          </Button>
         </>
       )}
     </div>

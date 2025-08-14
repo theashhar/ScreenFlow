@@ -14,7 +14,7 @@ export const SourceSelector: React.FC<SourceSelectorProps> = ({
 }) => {
   return (
     <div className="source-selector">
-      <h2>Select a screen to record:</h2>
+      <h2 className="text-xl font-semibold mb-4 text-foreground">Select a screen to record:</h2>
       <div className="sources-grid">
         {sources.map((source) => (
           <div
@@ -23,7 +23,7 @@ export const SourceSelector: React.FC<SourceSelectorProps> = ({
             onClick={() => onSourceSelect(source.id)}
           >
             <img src={source.thumbnail.toDataURL()} alt={source.name} />
-            <p>{source.name}</p>
+            <p className="text-foreground font-medium mt-2">{source.name}</p>
           </div>
         ))}
       </div>

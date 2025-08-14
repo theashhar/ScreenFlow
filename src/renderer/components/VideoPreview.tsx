@@ -38,7 +38,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
 
   return (
     <div className="preview">
-      <h3>Preview:</h3>
+      <h3 className="text-lg font-semibold mb-4 text-foreground">Preview:</h3>
       <video ref={videoRef} muted autoPlay playsInline />
     </div>
   );
