@@ -112,6 +112,11 @@ const configuration: webpack.Configuration = {
         test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
+      // Videos
+      {
+        test: /\.(mp4|webm|ogg|mov)$/i,
+        type: 'asset/resource',
+      },
       // SVG
       {
         test: /\.svg$/,
@@ -151,7 +156,7 @@ const configuration: webpack.Configuration = {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
-      DEBUG_PROD: false,
+      DEBUG_PROD: 'false',
     }),
 
     new MiniCssExtractPlugin({

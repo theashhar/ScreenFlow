@@ -3,6 +3,7 @@ import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { ModeToggle } from '../components/mode-toggle';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../auth/AuthContext';
+import signupGif from '../../../assets/signupimage.jpg';
 
 export default function UnauthLayout() {
   const navigate = useNavigate();
@@ -15,46 +16,30 @@ export default function UnauthLayout() {
   };
 
   return (
-    <div className="min-h-screen w-screen flex bg-background">
+    <div className="min-h-screen w-screen flex bg-background relative">
       {/* Left Panel - Constant */}
-      <div className="w-2/5 bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center p-12 relative">
-        <div className="text-primary-foreground max-w-md">
-          {/* Logo/Icon */}
-          <div className="mb-8">
-            <div className="w-12 h-12 bg-primary-foreground/20 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-            </div>
-          </div>
+      <div className="w-2/5 flex items-center justify-center bg-background relative">
+      {/* <div className="absolute top-24 right-0 w-1/2 h-1/2 rounded-full blur-3xl  dark:bg-[#414141]"/> */}
+        <div className="w-4/5 h-5/6 rounded-xl flex items-center justify-center relative overflow-hidden">
+        {/* Background GIF */}
+          <img
+            className="absolute inset-0 w-full h-full object-cover rounded-xl"
+            src={signupGif}
+            alt="Signup background"
+          />
 
-          {/* Main Heading */}
-          <h1 className="text-4xl font-bold mb-4">ScreenFlow</h1>
 
-          {/* Description */}
-          <p className="text-lg text-primary-foreground/80 leading-relaxed">
-            Create your account in a few steps, and get access to professional screen recording and editing tools.
-          </p>
+            <h1 className="text-2xl z-10 text-white font-bold mb-4">ScreenFlow</h1>
 
-          {/* Features List */}
-          <div className="mt-8 space-y-3">
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-primary-foreground rounded-full mr-3"></div>
-              <span className="text-primary-foreground/80">4K Ultra HD Recording</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-primary-foreground rounded-full mr-3"></div>
-              <span className="text-primary-foreground/80">Professional Editing Tools</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-primary-foreground rounded-full mr-3"></div>
-              <span className="text-primary-foreground/80">Cloud Storage & Sharing</span>
-            </div>
-          </div>
         </div>
+      </div>
 
+      {/* Right Panel - Dynamic Content */}
+      <div className="w-3/5 flex items-center justify-center bg-background p-12">
+        <div className="w-full max-w-md">
+          <Outlet />
         {/* Theme Toggle and Bypass Login in top right */}
-        <div className="absolute top-6 right-6 flex items-center space-x-2">
+        <div className="absolute top-6 right-6 flex items-center space-x-2 z-20">
           <ModeToggle />
           <Button
             variant="outline"
@@ -64,13 +49,6 @@ export default function UnauthLayout() {
             Bypass Login
           </Button>
         </div>
-
-      </div>
-
-      {/* Right Panel - Dynamic Content */}
-      <div className="w-3/5 flex items-center justify-center p-12 bg-card">
-        <div className="w-full max-w-md">
-          <Outlet />
         </div>
       </div>
     </div>
