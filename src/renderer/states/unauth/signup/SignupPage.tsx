@@ -1,19 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
+import { supabase } from '@/renderer/supabase/supabaseClient';
+import { SignupFormData } from './signupTypes';
+import { AuthResponse } from '@supabase/supabase-js';
 
 export default function SignupPage() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+  const [authData, setAuthData] = useState<AuthResponse['data'] | null>(null);
+  const [formData, setFormData] = useState<SignupFormData>({
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
     agreeToTerms: false
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignup = async () => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            displayName: formData.name,
+          }
+        }
+      })
+
+      setAuthData(data);
+
+      if (error) {
+        console.log('Signup error:', error);
+        // Handle the error appropriately (show user feedback, etc.)
+        return;
+      }
+
+      console.log('Signup successful:', data);
+      // Handle successful signup (redirect, show success message, etc.)
+    } catch (error) {
+      console.error('Unexpected error during signup:', error);
+      // Handle unexpected errors (network issues, etc.)
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -29,11 +60,10 @@ export default function SignupPage() {
 
     // TODO: Implement actual signup logic with API call
     // For now, simulate successful signup
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect to onboarding after successful signup
+    if (authData?.session !== null) {
       navigate('/onboarding');
-    }, 1000);
+    }
+
   };
 
   return (
@@ -46,35 +76,19 @@ export default function SignupPage() {
 
       {/* Signup Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-foreground mb-1">
-              First Name
+              Your Name
             </label>
             <Input
-              id="firstName"
-              name="firstName"
+              id="name"
+              name="name"
               type="text"
-              value={formData.firstName}
+              value={formData.name}
               onChange={handleChange}
               placeholder="John"
               required
             />
-          </div>
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-foreground mb-1">
-              Last Name
-            </label>
-            <Input
-              id="lastName"
-              name="lastName"
-              type="text"
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Doe"
-              required
-            />
-          </div>
         </div>
 
         <div>
@@ -149,6 +163,7 @@ export default function SignupPage() {
           disabled={isLoading || !formData.agreeToTerms}
           className="w-full"
           size="lg"
+          onClick={handleSignup}
         >
           {isLoading ? 'Creating Account...' : 'Create Account'}
         </Button>
