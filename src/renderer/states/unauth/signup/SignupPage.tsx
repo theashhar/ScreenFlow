@@ -5,6 +5,12 @@ import { Input } from '../../../components/ui/input';
 import { supabase } from '@/renderer/supabase/supabaseClient';
 import { SignupFormData } from './signupTypes';
 import { AuthResponse } from '@supabase/supabase-js';
+import { showToast } from '@/renderer/components';
+import {
+  validateSignupForm,
+  getPasswordStrength,
+} from './signupSchemea';
+import { Checkbox } from '@/renderer/components/ui/checkbox';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -17,6 +23,7 @@ export default function SignupPage() {
     agreeToTerms: false
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState<ReturnType<typeof getPasswordStrength> | null>(null);
 
   const handleSignup = async () => {
     try {
@@ -34,36 +41,49 @@ export default function SignupPage() {
 
       if (error) {
         console.log('Signup error:', error);
-        // Handle the error appropriately (show user feedback, etc.)
-        return;
+        showToast.error(error.message || 'Signup failed. Please try again.');
+        return false;
       }
 
       console.log('Signup successful:', data);
-      // Handle successful signup (redirect, show success message, etc.)
+      showToast.success('Account created successfully!');
+      return true;
     } catch (error) {
       console.error('Unexpected error during signup:', error);
-      // Handle unexpected errors (network issues, etc.)
+      showToast.error('An unexpected error occurred. Please try again.');
+      return false;
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // TODO: Implement actual signup logic with API call
-    // For now, simulate successful signup
-    if (authData?.session !== null) {
-      navigate('/onboarding');
+    if (!validateSignupForm(formData)) {
+      return;
     }
 
+    setIsLoading(true);
+
+    try {
+      const success = await handleSignup();
+      if (success) {
+        navigate('/onboarding');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Real-time password strength validation
+    if (name === 'password') {
+      setPasswordStrength(getPasswordStrength(value));
+    }
   };
 
   return (
@@ -76,25 +96,19 @@ export default function SignupPage() {
 
       {/* Signup Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-foreground mb-1">
-              Your Name
-            </label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="John"
-              required
-            />
-        </div>
-
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
-            Email Address
-          </label>
+          <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">Your Name</label>
+          <Input
+            id="name"
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="John"
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">Email Address</label>
           <Input
             id="email"
             name="email"
@@ -102,14 +116,10 @@ export default function SignupPage() {
             value={formData.email}
             onChange={handleChange}
             placeholder="john@example.com"
-            required
           />
         </div>
-
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
-            Password
-          </label>
+          <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">Password</label>
           <Input
             id="password"
             name="password"
@@ -117,14 +127,31 @@ export default function SignupPage() {
             value={formData.password}
             onChange={handleChange}
             placeholder="Create a strong password"
-            required
           />
+          {passwordStrength && (
+            <div className="mt-2">
+              <div className="text-sm">
+                Strength: <span className={`font-bold ${
+                  passwordStrength.strength === 'weak' ? 'text-red-500' :
+                  passwordStrength.strength === 'medium' ? 'text-yellow-500' :
+                  'text-green-500'
+                }`}>
+                  {passwordStrength.strength}
+                </span>
+              </div>
+              {passwordStrength.feedback.length > 0 && (
+                <ul className="text-xs text-muted-foreground mt-1">
+                  {passwordStrength.feedback.map((item, index) => (
+                    <li key={index}>• {item}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1">
-            Confirm Password
-          </label>
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1">Confirm Password</label>
           <Input
             id="confirmPassword"
             name="confirmPassword"
@@ -132,21 +159,12 @@ export default function SignupPage() {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder="Confirm your password"
-            required
           />
         </div>
 
-        <div className="flex items-start">
-          <input
-            id="agreeToTerms"
-            name="agreeToTerms"
-            type="checkbox"
-            checked={formData.agreeToTerms}
-            onChange={handleChange}
-            className="mt-1 rounded border-input text-primary focus:ring-ring"
-            required
-          />
-          <label htmlFor="agreeToTerms" className="ml-2 text-sm text-muted-foreground">
+        <div className="flex items-start space-x-2">
+          <Checkbox checked={formData.agreeToTerms} onCheckedChange={(checked: boolean) => {setFormData(prev => ({...prev, agreeToTerms: checked}))}} />
+          <label htmlFor="agreeToTerms" className="text-sm text-muted-foreground">
             I agree to the{' '}
             <Link to="/terms" className="text-primary hover:text-primary/80">
               Terms of Service
@@ -163,7 +181,6 @@ export default function SignupPage() {
           disabled={isLoading || !formData.agreeToTerms}
           className="w-full"
           size="lg"
-          onClick={handleSignup}
         >
           {isLoading ? 'Creating Account...' : 'Create Account'}
         </Button>
