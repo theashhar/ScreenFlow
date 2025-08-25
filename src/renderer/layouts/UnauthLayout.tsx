@@ -1,19 +1,16 @@
 import React from 'react';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { ModeToggle } from '../components/mode-toggle';
-import { Button } from '../components/ui/button';
 import { useAuth } from '../auth/AuthContext';
 import signupGif from '../../../assets/signupimage.jpg';
 
 export default function UnauthLayout() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const { authState } = useAuth();
 
-  const handleBypassLogin = () => {
-    // For development/testing purposes - bypass authentication
-    login('farzi-token')
-    navigate('/app');
-  };
+  // Redirect to app if user is already authenticated
+  if (authState === 'authenticated') {
+    return <Navigate to="/app" replace />;
+  }
 
   return (
     <div className="min-h-screen w-screen flex bg-background relative">
@@ -38,16 +35,9 @@ export default function UnauthLayout() {
       <div className="w-3/5 flex items-center justify-center bg-background p-12">
         <div className="w-full max-w-md">
           <Outlet />
-        {/* Theme Toggle and Bypass Login in top right */}
+        {/* Theme Toggle in top right */}
         <div className="absolute top-6 right-6 flex items-center space-x-2 z-20">
           <ModeToggle />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleBypassLogin}
-          >
-            Bypass Login
-          </Button>
         </div>
         </div>
       </div>

@@ -41,7 +41,7 @@ export default function AppLayout() {
           </nav>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-sm text-muted-foreground">{user?.email}</span>
+          <span className="text-sm text-muted-foreground">{user?.user?.user_metadata?.displayName}</span>
           <ModeToggle />
           <Button
             onClick={logout}

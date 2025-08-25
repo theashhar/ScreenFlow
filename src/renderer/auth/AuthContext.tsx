@@ -1,5 +1,6 @@
 import { AuthResponse, User } from '@supabase/supabase-js';
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import { supabase } from '@/renderer/supabase/supabaseClient';
 
 type AuthState = 'loading' | 'unauthenticated' | 'onboarding' | 'authenticated';
 
@@ -7,7 +8,7 @@ type AuthContextValue = {
   authState: AuthState;
   user: AuthResponse['data'] | null;
   login: (user: AuthResponse['data'] | null) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -17,12 +18,54 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [user, setUser] = useState<AuthResponse['data'] | null>(null);
 
   useEffect(() => {
-    // TODO: replace with real bootstrap (read token, fetch user, check onboarding)
     const bootstrap = async () => {
-      // For now, start with unauthenticated state to show the auth flow
-      setAuthState('unauthenticated');
+      try {
+        // Check for existing session
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error('Error getting session:', error);
+          setAuthState('unauthenticated');
+          return;
+        }
+
+        if (session) {
+          // User has an active session, set as authenticated
+          setUser({ user: session.user, session });
+          setAuthState('authenticated');
+        } else {
+          // No session found, user needs to login
+          console.log('No existing session found');
+          setAuthState('unauthenticated');
+        }
+      } catch (error) {
+        console.error('Error during auth bootstrap:', error);
+        setAuthState('unauthenticated');
+      }
     };
+
     bootstrap();
+
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('Auth state changed:', event, session);
+
+        if (event === 'SIGNED_IN' && session) {
+          setUser({ user: session.user, session });
+          setAuthState('authenticated');
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setAuthState('unauthenticated');
+        } else if (event === 'TOKEN_REFRESHED' && session) {
+          setUser({ user: session.user, session });
+          setAuthState('authenticated');
+        }
+      }
+    );
+
+    // Cleanup subscription on unmount
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (user: AuthResponse['data'] | null) => {
@@ -33,10 +76,19 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     setUser(user);
   };
 
-  const logout = () => {
-    // TODO: clear token, state, etc.
-    setUser(null);
-    setAuthState('unauthenticated');
+  const logout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error signing out:', error);
+      }
+      // State will be updated by the auth state listener
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Fallback: manually update state
+      setUser(null);
+      setAuthState('unauthenticated');
+    }
   };
   console.log('authState', authState);
   console.log('user', user);
