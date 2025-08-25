@@ -1,18 +1,72 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
+import { supabase } from '@/renderer/supabase/supabaseClient';
+import { showToast } from '@/renderer/components';
+import { useAuth } from '@/renderer/auth/AuthContext';
+import { LoginFormData, validateLoginForm } from '../ValidationSchema';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    password: ''
+  });
   const [isLoading, setIsLoading] = useState(false);
+
+  const signInWithEmail = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) {
+        console.log('Login error:', error);
+        showToast.error(error.message || 'Login failed. Please try again.');
+        return false;
+      }
+
+      console.log('Login successful:', data);
+
+      // Use the AuthContext login method to update auth state
+      await login(data);
+      return true;
+    } catch (error) {
+      console.error('Unexpected error during login:', error);
+      showToast.error('An unexpected error occurred. Please try again.');
+      return false;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateLoginForm(formData)) {
+      return;
+    }
+
     setIsLoading(true);
-    // TODO: Implement login logic
-    setTimeout(() => setIsLoading(false), 1000);
+
+    try {
+      showToast.loading('Signing in...', 1000);
+      const success = await signInWithEmail();
+      if (success) {
+        navigate('/app');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
@@ -31,11 +85,11 @@ export default function LoginPage() {
           </label>
           <Input
             id="email"
+            name="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Enter your email"
-            required
           />
         </div>
 
@@ -45,11 +99,11 @@ export default function LoginPage() {
           </label>
           <Input
             id="password"
+            name="password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
             placeholder="Enter your password"
-            required
           />
         </div>
 

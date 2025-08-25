@@ -9,10 +9,12 @@ import { showToast } from '@/renderer/components';
 import {
   validateSignupForm,
   getPasswordStrength,
-} from './signupSchemea';
+} from '../ValidationSchema';
 import { Checkbox } from '@/renderer/components/ui/checkbox';
+import { useAuth } from '@/renderer/auth/AuthContext';
 
 export default function SignupPage() {
+  const {login} = useAuth();
   const navigate = useNavigate();
   const [authData, setAuthData] = useState<AuthResponse['data'] | null>(null);
   const [formData, setFormData] = useState<SignupFormData>({
@@ -47,6 +49,8 @@ export default function SignupPage() {
 
       console.log('Signup successful:', data);
       showToast.success('Account created successfully!');
+
+      await login(data);
       return true;
     } catch (error) {
       console.error('Unexpected error during signup:', error);
@@ -65,6 +69,7 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
+      showToast.loading('Creating Account...')
       const success = await handleSignup();
       if (success) {
         navigate('/onboarding');
@@ -112,7 +117,6 @@ export default function SignupPage() {
           <Input
             id="email"
             name="email"
-            type="email"
             value={formData.email}
             onChange={handleChange}
             placeholder="john@example.com"

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { showToast } from '../../../components/toastMessages';
+import { showToast } from '../../components/toastMessages';
 
 // Signup schema with validation rules
 export const signupSchema = z.object({
@@ -98,7 +98,6 @@ export const validateField = {
     }
   },
 };
-
 // Helper function to get password strength
 export const getPasswordStrength = (password: string): {
   strength: 'weak' | 'medium' | 'strong';
@@ -149,3 +148,63 @@ export const getPasswordStrength = (password: string): {
 
   return { strength, score, feedback };
 };
+
+// Login schema with validation rules
+export const loginSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .email("Invalid email address"),
+  password: z
+    .string()
+    .nonempty("Password is required")
+    .min(1, "Password is required"),
+});
+
+// TypeScript type for the login form data
+export type LoginFormData = z.infer<typeof loginSchema>;
+
+// Validation function that shows toast messages
+export const validateLoginForm = (data: LoginFormData): boolean => {
+  try {
+    loginSchema.parse(data);
+    return true;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      // Show the first validation error as a toast
+      const firstError = error.issues[0];
+      showToast.error(firstError.message);
+    } else {
+      showToast.error("Validation failed. Please check your input.");
+    }
+    return false;
+  }
+};
+
+// Individual field validation functions for login
+export const validateLoginField = {
+  email: (value: string): boolean => {
+    try {
+      loginSchema.shape.email.parse(value);
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        showToast.error(error.issues[0].message);
+      }
+      return false;
+    }
+  },
+
+  password: (value: string): boolean => {
+    try {
+      loginSchema.shape.password.parse(value);
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        showToast.error(error.issues[0].message);
+      }
+      return false;
+    }
+  },
+};
+

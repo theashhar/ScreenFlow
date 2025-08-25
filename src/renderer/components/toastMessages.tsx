@@ -2,19 +2,20 @@ import toast, { Toaster } from 'react-hot-toast';
 
 // Toast utility functions
 export const showToast = {
-  success: (message: string) => toast.success(message),
-  error: (message: string) => toast.error(message),
-  loading: (message: string) => toast.loading(message),
+  success: (message: string, duration?: number) => toast.success(message, { duration }),
+  error: (message: string, duration?: number) => toast.error(message, { duration }),
+  loading: (message: string, duration?: number) => toast.loading(message, { duration }),
   promise: <T,>(
     promise: Promise<T>,
     msgs: {
       loading: string;
       success: string;
       error: string;
-    }
-  ) => toast.promise(promise, msgs),
+    },
+    duration?: number
+  ) => toast.promise(promise, msgs, { duration }),
   dismiss: (toastId?: string) => toast.dismiss(toastId),
-  custom: (message: string) => toast(message),
+  custom: (message: string, duration?: number) => toast(message, { duration }),
 };
 
 // Toaster component with custom styling
@@ -56,19 +57,23 @@ const ToastMessages = () => {
 export default ToastMessages;
 
 /*
-✅ showToast.success() - Success messages
-✅ showToast.error() - Error messages
-✅ showToast.loading() - Loading states
-✅ showToast.promise() - Promise-based toasts
-✅ showToast.dismiss() - Dismiss specific toasts
-✅ showToast.custom() - Custom messages
+✅ showToast.success(message, duration?) - Success messages
+✅ showToast.error(message, duration?) - Error messages
+✅ showToast.loading(message, duration?) - Loading states
+✅ showToast.promise(promise, msgs, duration?) - Promise-based toasts
+✅ showToast.dismiss(toastId?) - Dismiss specific toasts
+✅ showToast.custom(message, duration?) - Custom messages
 
+// Examples:
+showToast.loading('Processing...', 5000); // 5 seconds
+showToast.success('Saved!', 2000); // 2 seconds
 showToast.promise(
   fetch('/api/user'),
   {
     loading: 'Saving user...',
     success: 'User saved!',
     error: 'Failed to save user'
-  }
+  },
+  3000 // 3 seconds duration
 );
 */
