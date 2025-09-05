@@ -37,9 +37,15 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   }
 
   return (
-    <div className="preview">
+    <div className="my-5 p-5 rounded-lg border border-border bg-card">
       <h3 className="text-lg font-semibold mb-4 text-foreground">Preview:</h3>
-      <video ref={videoRef} muted autoPlay playsInline />
+      <video
+        ref={videoRef}
+        muted
+        autoPlay
+        playsInline
+        className="w-full max-h-96 bg-muted rounded-lg object-contain"
+      />
     </div>
   );
 };

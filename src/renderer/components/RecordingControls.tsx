@@ -1,6 +1,7 @@
 import React from 'react';
 import { RecordingState } from '../types';
 import { Button } from "./ui/button"
+import { PlayIcon, Video } from 'lucide-react';
 
 interface RecordingControlsProps {
   selectedSource: string;
@@ -18,19 +19,21 @@ export const RecordingControls: React.FC<RecordingControlsProps> = ({
   formatTime,
 }) => {
   return (
-    <div className="record-controls">
+    <div className="flex justify-center my-5">
       {!recordingState.isRecording ? (
         <Button
+          icon={<Video color='red' />}
           variant="outline"
           disabled={!selectedSource || recordingState.recordingComplete}
           onClick={onStartRecording}
+          className='hover:text-red-500'
         >
           Start Recording
         </Button>
       ) : (
         <>
-          <div className="recording-indicator">
-            <div className="recording-dot" />
+          <div className="flex items-center mr-4">
+            <div className="w-3 h-3 bg-destructive rounded-full mr-2 animate-recording-pulse" />
             <span className="text-foreground">Recording: {formatTime(recordingState.recordingTime)}</span>
           </div>
           <Button

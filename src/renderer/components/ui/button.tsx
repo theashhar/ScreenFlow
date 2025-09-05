@@ -38,17 +38,33 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  icon?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, icon, children, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
+    // If asChild is true and we have an icon, we can't use Slot with multiple children
+    if (asChild && icon) {
+      console.warn("Button: Cannot use 'icon' prop when 'asChild' is true. Please add the icon directly to your child component.")
+    }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-      />
+      >
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {icon && <span className="flex items-center">{icon}</span>}
+            {children}
+          </>
+        )}
+      </Comp>
     )
   }
 )

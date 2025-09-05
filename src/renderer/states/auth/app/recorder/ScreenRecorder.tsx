@@ -20,7 +20,7 @@ export default function ScreenRecorder() {
   } = useScreenRecording();
 
   return (
-    <div className="screen-recorder">
+    <div className="w-full bg-card p-5 rounded-lg shadow-lg border border-border">
       <h2 className="text-2xl font-bold mb-6 text-foreground">Screen Recorder</h2>
 
       <div className="space-y-6">
