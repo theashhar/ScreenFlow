@@ -1,10 +1,10 @@
-# ScreenFlow
+# ScreenLoom
 
-An all-in-one screen recorder software built with Electron and React. ScreenFlow provides a modern, cross-platform solution for capturing your screen with high-quality video output.
+An all-in-one screen recorder software built with Electron and React. ScreenLoom provides a modern, cross-platform solution for capturing your screen with high-quality video output.
 
-## What is ScreenFlow + Features
+## What is ScreenLoom + Features
 
-ScreenFlow is a desktop application that allows you to:
+ScreenLoom is a desktop application that allows you to:
 
 - **Screen Recording**: Capture your entire screen or specific windows
 - **High-Quality Output**: Record in WebM format with VP9 codec for optimal quality
@@ -32,7 +32,7 @@ ScreenFlow is a desktop application that allows you to:
 ```bash
 # Clone the repository
 git clone https://github.com/theashhar/SalesFlow.git
-cd ScreenFlow
+cd ScreenLoom
 
 # Install dependencies
 npm install

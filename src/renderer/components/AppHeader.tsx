@@ -3,7 +3,7 @@ import { SidebarTrigger } from './ui/sidebar';
 import { AppHeaderProps } from './sidebar';
 
 export function AppHeader({
-  title = "ScreenFlow",
+  title = "ScreenLoom",
   showSidebarTrigger = true,
   actions
 }: AppHeaderProps) {

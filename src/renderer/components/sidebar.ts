@@ -5,6 +5,8 @@ import {
   Settings,
   Monitor
 } from 'lucide-react';
+import screenLoomIcon from '../../../assets/screenLoomIcon.svg';
+
 
 // Types
 export interface SidebarMenuItem {
@@ -18,7 +20,7 @@ export interface SidebarMenuItem {
 export interface SidebarConfig {
   items: SidebarMenuItem[];
   title: string;
-  logo?: React.ComponentType<{ className?: string }>;
+  logo?: string;
 }
 
 export interface AppHeaderProps {
@@ -29,8 +31,8 @@ export interface AppHeaderProps {
 
 // Configuration
 export const sidebarConfig: SidebarConfig = {
-  title: "ScreenFlow",
-  logo: Monitor,
+  title: "ScreenLoom",
+  logo: screenLoomIcon,
   items: [
     {
       id: "dashboard",

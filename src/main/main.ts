@@ -40,7 +40,7 @@ ipcMain.handle('get-sources', async () => {
 
 // Directory for saving recordings
 const getVideoDir = () => {
-  return path.join(app.getPath('videos'), 'ScreenFlow');
+  return path.join(app.getPath('videos'), 'ScreenLoom');
 };
 
 // Ensure video directory exists

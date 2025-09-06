@@ -6,7 +6,7 @@ export default function OnboardingWelcome() {
     <div className="w-full">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to ScreenFlow!</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to ScreenLoom!</h2>
         <p className="text-gray-600">Let's get you set up in just a few steps</p>
       </div>
 
@@ -19,7 +19,7 @@ export default function OnboardingWelcome() {
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">Account Created Successfully</h3>
-          <p className="text-gray-600">Your ScreenFlow account is ready. Let's configure it for the best experience.</p>
+          <p className="text-gray-600">Your ScreenLoom account is ready. Let's configure it for the best experience.</p>
         </div>
 
         {/* Steps Preview */}

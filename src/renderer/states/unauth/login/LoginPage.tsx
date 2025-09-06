@@ -74,7 +74,7 @@ export default function LoginPage() {
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-foreground mb-2">Welcome Back</h2>
-        <p className="text-muted-foreground">Sign in to your ScreenFlow account</p>
+        <p className="text-muted-foreground">Sign in to your ScreenLoom account</p>
       </div>
 
       {/* Login Form */}

@@ -96,7 +96,7 @@ export default function SignupPage() {
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-foreground mb-2">Create Account</h2>
-        <p className="text-muted-foreground">Join ScreenFlow and start recording</p>
+        <p className="text-muted-foreground">Join ScreenLoom and start recording</p>
       </div>
 
       {/* Signup Form */}

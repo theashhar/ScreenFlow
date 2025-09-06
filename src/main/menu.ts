@@ -54,17 +54,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'ScreenFlow',
+      label: 'ScreenLoom',
       submenu: [
         {
-          label: 'About ScreenFlow',
+          label: 'About ScreenLoom',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ScreenFlow',
+          label: 'Hide ScreenLoom',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -122,7 +122,7 @@ export default class MenuBuilder {
           click: () => {
             const { shell } = require('electron');
             const path = require('path');
-            shell.openPath(path.join(app.getPath('videos'), 'ScreenFlow'));
+            shell.openPath(path.join(app.getPath('videos'), 'ScreenLoom'));
           },
         },
       ],
@@ -259,7 +259,7 @@ export default class MenuBuilder {
             click: () => {
               const { shell } = require('electron');
               const path = require('path');
-              shell.openPath(path.join(app.getPath('videos'), 'ScreenFlow'));
+              shell.openPath(path.join(app.getPath('videos'), 'ScreenLoom'));
             },
           },
         ],

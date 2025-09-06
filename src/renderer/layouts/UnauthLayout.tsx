@@ -25,9 +25,9 @@ export default function UnauthLayout() {
             src={signupGif}
             alt="Signup background"
           />
-        <img src={screenLoomLogo} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" width={200} height={200} alt="ScreenFlow logo" />
+        <img src={screenLoomLogo} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" width={200} height={200} alt="ScreenLoom logo" />
 
-            {/* <h1 className="text-2xl z-10 text-white font-bold mb-4">ScreenFlow</h1> */}
+            {/* <h1 className="text-2xl z-10 text-white font-bold mb-4">ScreenLoom</h1> */}
 
         </div>
       </div>

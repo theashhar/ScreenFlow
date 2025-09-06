@@ -19,13 +19,11 @@ export function AppSidebar() {
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const Logo = sidebarConfig.logo;
-
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2">
-          {Logo && <Logo className="h-6 w-6" />}
+          {sidebarConfig.logo && <img src={sidebarConfig.logo} className="h-6 w-6" alt="ScreenLoom logo" />}
           <span className="font-semibold">{sidebarConfig.title}</span>
         </div>
       </SidebarHeader>

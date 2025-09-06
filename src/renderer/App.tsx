@@ -7,7 +7,7 @@ import AppRouter from './routes/AppRouter';
 
 export default function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="screenflow-theme">
+    <ThemeProvider defaultTheme="light" storageKey="screenloom-theme">
       <AuthProvider>
         <Router>
           <AppRouter />

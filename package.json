@@ -1,5 +1,5 @@
 {
-  "name": "ScreenFlow",
+  "name": "ScreenLoom",
   "description": "An all in one screen recorder software",
   "keywords": [
     "screen-record",
@@ -172,8 +172,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "SalesFlow",
-    "appId": "com.theashhar.SalesFlow",
+    "productName": "ScreenLoom",
+    "appId": "com.theashhar.ScreenLoom",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
