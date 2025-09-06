@@ -1,7 +1,7 @@
 import React from 'react';
 import { RecordingState } from '../types';
 import { Button } from "./ui/button"
-import { PlayIcon, Video } from 'lucide-react';
+import { Video } from 'lucide-react';
 
 interface RecordingControlsProps {
   selectedSource: string;

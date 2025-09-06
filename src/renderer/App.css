@@ -130,15 +130,6 @@ a:hover {
  ---break---
  */
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
 /* Sidebar specific styles - keeping minimal overrides */
 /* Ensure proper content area without gaps */
 .group\/sidebar-wrapper > main {

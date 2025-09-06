@@ -22,6 +22,7 @@ export const useScreenRecording = (): UseScreenRecordingReturn => {
       // Stop any existing preview stream
       if (previewStream) {
         previewStream.getTracks().forEach(track => track.stop());
+        setPreviewStream(null);
       }
 
       const constraints: MediaConstraints = {
@@ -132,14 +133,12 @@ export const useScreenRecording = (): UseScreenRecordingReturn => {
       setRecordingState(prev => ({ ...prev, isRecording: false }));
 
       // Handle the recorded data after a short delay to ensure all chunks are collected
-      setTimeout(() => {
+      setTimeout(async () => {
         if (recordedChunks.length > 0) {
           const blob = new Blob(recordedChunks, { type: 'video/webm' });
-
-          // Save the file via IPC
-          blob.arrayBuffer().then((buffer) => {
-            window.electron.ipcRenderer.sendMessage('recording-data', buffer);
-          });
+          const buffer = await blob.arrayBuffer();
+          window.electron.ipcRenderer.sendMessage('recording-data', buffer);
+          setRecordedChunks([]); // Clear chunks after processing
         }
       }, 500);
     }

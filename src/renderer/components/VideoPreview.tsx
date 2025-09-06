@@ -15,15 +15,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
     if (videoRef.current && previewStream) {
       videoRef.current.srcObject = previewStream;
 
-      // Add event listeners for debugging
-      videoRef.current.onloadedmetadata = () => {
-        console.log('Video metadata loaded');
-      };
-
-      videoRef.current.oncanplay = () => {
-        console.log('Video can play');
-      };
-
+      // Add error handling
       videoRef.current.onerror = (e) => {
         console.error('Video error:', e);
       };

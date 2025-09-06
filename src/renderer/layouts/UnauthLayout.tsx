@@ -3,6 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { ModeToggle } from '../components/mode-toggle';
 import { useAuth } from '../auth/AuthContext';
 import signupGif from '../../../assets/signupimage.jpg';
+import screenLoomLogo from '../../../assets/screenLoomLogo.svg';
 
 export default function UnauthLayout() {
   const { authState } = useAuth();
@@ -20,13 +21,13 @@ export default function UnauthLayout() {
         <div className="w-4/5 h-5/6 rounded-xl flex items-center justify-center relative overflow-hidden">
         {/* Background GIF */}
           <img
-            className="absolute inset-0 w-full h-full object-cover rounded-xl"
+            className="absolute inset-0 w-full h-full object-cover rounded-xl brightness-50"
             src={signupGif}
             alt="Signup background"
           />
+        <img src={screenLoomLogo} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" width={200} height={200} alt="ScreenFlow logo" />
 
-
-            <h1 className="text-2xl z-10 text-white font-bold mb-4">ScreenFlow</h1>
+            {/* <h1 className="text-2xl z-10 text-white font-bold mb-4">ScreenFlow</h1> */}
 
         </div>
       </div>

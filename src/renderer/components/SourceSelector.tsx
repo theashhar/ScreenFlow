@@ -15,7 +15,6 @@ export const SourceSelector: React.FC<SourceSelectorProps> = ({
   return (
     <div className="mb-5">
       <h2 className="text-xl font-semibold mb-4 text-foreground">Select a screen to record:</h2>
-      {/* <div className="flex gap-4 mt-4"> */}
       <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 mt-4">
         {sources.map((source) => (
           <div
