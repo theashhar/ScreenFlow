@@ -19,9 +19,9 @@ export const SourceSelector: React.FC<SourceSelectorProps> = ({
         {sources.map((source) => (
           <div
             key={source.id}
-            className={`bg-secondary p-2.5 rounded-lg cursor-pointer transition-all duration-200 border border-border hover:bg-accent ${
+            className={`bg-black p-2 rounded-lg cursor-pointer transition-all duration-200 border border-border hover:border-primary  ${
               selectedSource === source.id
-                ? 'bg-primary text-primary-foreground shadow-[0_0_0_2px_hsl(var(--ring))]'
+                ? '!bg-accent border-primary'
                 : ''
             }`}
             onClick={() => onSourceSelect(source.id)}
