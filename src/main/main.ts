@@ -67,6 +67,12 @@ ipcMain.on('recording-data', (event, buffer) => {
   });
 });
 
+// Handle opening recordings folder
+ipcMain.on('open-recordings-folder', () => {
+  const videoDir = getVideoDir();
+  shell.openPath(videoDir);
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

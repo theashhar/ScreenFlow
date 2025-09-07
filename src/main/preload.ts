@@ -2,7 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example' | 'get-sources' | 'start-recording' | 'stop-recording' | 'recording-data' | 'recording-complete' | 'menu-start-recording' | 'menu-stop-recording';
+export type Channels = 'ipc-example' | 'get-sources' | 'start-recording' | 'stop-recording' | 'recording-data' | 'recording-complete' | 'menu-start-recording' | 'menu-stop-recording' | 'open-recordings-folder';
 
 const electronHandler = {
   ipcRenderer: {

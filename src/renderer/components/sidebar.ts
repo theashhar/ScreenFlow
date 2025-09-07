@@ -46,11 +46,11 @@ export const sidebarConfig: SidebarConfig = {
       path: "/app/record",
       icon: Video,
     },
-    {
-      id: "settings",
-      label: "Settings",
-      path: "/app/settings",
-      icon: Settings,
-    },
+    // {
+    //   id: "settings",
+    //   label: "Settings",
+    //   path: "/app/settings",
+    //   icon: Settings,
+    // },
   ],
 };
